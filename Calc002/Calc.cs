@@ -8,7 +8,6 @@ using System.Windows.Forms;
 namespace Calc002
 {
 
-
     enum Operator 
     {
         Plus,
@@ -20,19 +19,25 @@ namespace Calc002
 
     class Term 
     {
-        public string value { get; set; }
+        public Term(string v) 
+        {
+            this.Value = v;
+        }
+        public string Value { get; set; }
     }
 
     class Expression 
     {
         
+        //Op, Rはnullで未入力を表す
         public Term L { get; set; }
         public Operator? Op { get; set; }
-        public Term R { get; set; }      
+        public Term R{ get; set; }      
 
         public Expression() 
         {
-            L = "0";
+            //左項のみ値ありでスタート
+            L = new Term("0");
         }
 
         //式を計算して左項に代入し、演算子と右項は空に
@@ -43,8 +48,8 @@ namespace Calc002
                 return false;
             }
 
-            decimal dl = decimal.Parse(L);
-            decimal dr = decimal.Parse(R);
+            decimal dl = decimal.Parse(L.Value);
+            decimal dr = decimal.Parse(R.Value);
 
             switch (Op)
             {
@@ -64,7 +69,7 @@ namespace Calc002
                     break;
             }
 
-            L = dl.ToString();
+            L.Value = dl.ToString();
             Op = null;
             R = null;
 
@@ -95,7 +100,7 @@ namespace Calc002
         {
             this.Exp = new Expression();
             this.IsError = false;
-            this.ExpText = Exp.L.ToString();
+            this.ExpText = Exp.L.Value.ToString();
             this.OpText = "";
         }
 
@@ -111,7 +116,26 @@ namespace Calc002
             IsError = true;
         }
 
-        //数字キーのどれか押された時の処理
+        //右項か左項、編集対象の方を返す
+        //基本的に演算子が入力済みなら左項を、未入力なら右項を編集する
+        //右項が編集対象かつ右項がnullのとき、isMakeRightTermがTrueなら右項に0を入力、falseならnullを返す
+        private Term getTerm(bool isMakeRightTerm) 
+        {
+            if (Exp.Op == null)
+            {
+                return Exp.L;
+            }
+            else
+            {
+                if (Exp.R == null) 
+                {
+                    return isMakeRightTerm ? (Exp.R = new Term("0")) : null;
+                }
+
+                return Exp.R;
+            }
+        }
+
         public void pushNum(int num) 
         {
             if(!(num <= 9))
@@ -121,31 +145,40 @@ namespace Calc002
 
             if (IsError) init();
 
-            string temp;
+            Term target = getTerm(true);
 
-            if(Exp.Op==null)
-            {
-                temp = Exp.L;
-            }
-            else
-            {
-                if (Exp.R == null) Exp.R = "0";
-                temp = Exp.R;
-            }
+            string temp = target.Value;
              
             temp = (temp == "0") ? num.ToString() : temp + num.ToString();
 
-            //戻すかのチェック
+            //入力した結果がParseできるかチェックしてからターゲットの項とテキストに反映する
             decimal result;
             if (decimal.TryParse(temp, out result)) 
-            {                
-                ExpText = temp;
-
-                if (Exp.Op == null)
-                    Exp.L = temp;
-                else
-                    Exp.R = temp;
+            {
+                target.Value = result.ToString();
+                ExpText = target.Value;
             }
+        }
+
+        //.キーが押されたときの処理
+        public void pushDot()
+        {
+            Term target;
+
+            target = getTerm(true);
+
+            string temp = target.Value;
+
+            temp += ".";
+
+            decimal result;
+            if (decimal.TryParse(temp, out result))
+            {
+                target.Value = temp;
+
+                ExpText = target.Value;
+            }
+
 
         }
 
@@ -157,6 +190,8 @@ namespace Calc002
             {
                 return;
             }
+
+            if (IsError) return;
 
             //右項入力済みで記号を入力→計算して左辺へ代入した上で演算子を受付
             if (Exp.R != null) 
@@ -175,7 +210,7 @@ namespace Calc002
                     setError();
                     return;
                 }
-                ExpText = Exp.L.ToString();
+                ExpText = Exp.L.Value;
 
                 //「=」は結果の表示だけ　続けて計算はしない
                 if (op == Operator.Equal)
@@ -208,75 +243,36 @@ namespace Calc002
             }
         }
 
-        //.キーが押されたときの処理
-        public void pushDot() 
-        {
-            string temp;
 
-            if (Exp.Op == null) 
-            {
-                temp = Exp.L;                
-            }
-            else 
-            {
-                if (Exp.R == null) return;
-                temp = Exp.R;
-            }
-
-            temp += ".";
-
-            decimal result;
-
-            if (decimal.TryParse(temp, out result))
-            {
-                ExpText = temp;
-
-                if (Exp.Op == null)
-                    Exp.L = temp;
-                else
-                    Exp.R = temp;
-            }
-
-
-        }
 
         public void pushBS()
         {
-            if (Exp.Op == null) 
-            {
-                if(Exp.L != "0") Exp.L = Exp.L.Remove(Exp.L.Length-1);
-                if (Exp.L == "") Exp.L = "0";
-                ExpText = Exp.L;
-            }
-            else if (Exp.R == null) 
-            {
-                return;
-            }
-            else 
-            {
-                if (Exp.R != "0") Exp.R = Exp.R.Remove(Exp.R.Length - 1);
-                if (Exp.R == "") Exp.R = "0";
-                ExpText = Exp.R;
-            }
+            if (IsError) return;
+
+            Term target;
+
+            target = getTerm(false);
+
+            if (target == null) return;
+
+            if (target.Value != "0") target.Value = target.Value.Remove(target.Value.Length - 1);
+            if (target.Value == "") target.Value = "0";
+            ExpText = target.Value;
 
         }
 
         public void pushCE() 
         {
-            if (Exp.Op == null)
-            {
-                Exp.L = "0";
-                ExpText = Exp.L;
-            }
-            else if (Exp.R == null)
-            {
-                return;
-            }
-            else
-            {
-                Exp.R = "0";
-                ExpText = Exp.R;
-            }
+            if (IsError) return;
+
+            Term target;
+
+            target = getTerm(false);
+
+            if (target == null) return;
+
+            target.Value = "0";
+            ExpText = target.Value;
         }
 
 
