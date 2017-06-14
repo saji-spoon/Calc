@@ -16,13 +16,19 @@ namespace Calc002
         Multi,
         Divide,
         Equal
-    }    
+    }
+
+    class Term 
+    {
+        public string value { get; set; }
+    }
 
     class Expression 
     {
-        public string L { get; set; }
+        
+        public Term L { get; set; }
         public Operator? Op { get; set; }
-        public string R { get; set; }      
+        public Term R { get; set; }      
 
         public Expression() 
         {
