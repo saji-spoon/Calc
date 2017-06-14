@@ -29,10 +29,11 @@ namespace Calc002
     class Expression 
     {
         
-        //Op, Rはnullで未入力を表す
+        //Op, R, Aはnullで未入力を表す
         public Term L { get; set; }
         public Operator? Op { get; set; }
-        public Term R{ get; set; }      
+        public Term R{ get; set; }
+        public Term A { get; set; }
 
         public Expression() 
         {
@@ -40,7 +41,7 @@ namespace Calc002
             L = new Term("0");
         }
 
-        //式を計算して左項に代入し、演算子と右項は空に
+        //式を計算してAに代入する
         public bool eval() 
         {
             if (Op == null || R == null) 
@@ -275,6 +276,11 @@ namespace Calc002
                     OpText = "E";
                     break;
             }
+        }
+
+        public void pushEq() 
+        {
+            if (!Exp.eval()) return;
         }
 
         public void pushBS()
