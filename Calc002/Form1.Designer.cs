@@ -35,14 +35,15 @@
             this.b3 = new System.Windows.Forms.Button();
             this.b2 = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.b00 = new System.Windows.Forms.Button();
             this.bC = new System.Windows.Forms.Button();
             this.bCE = new System.Windows.Forms.Button();
             this.bBS = new System.Windows.Forms.Button();
-            this.bDot = new System.Windows.Forms.Button();
             this.b0 = new System.Windows.Forms.Button();
             this.b9 = new System.Windows.Forms.Button();
             this.b8 = new System.Windows.Forms.Button();
             this.b7 = new System.Windows.Forms.Button();
+            this.bDot = new System.Windows.Forms.Button();
             this.bPlus = new System.Windows.Forms.Button();
             this.bMinus = new System.Windows.Forms.Button();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -121,10 +122,10 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.Controls.Add(this.b00, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.bC, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.bCE, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.bBS, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.bDot, 1, 4);
             this.tableLayoutPanel1.Controls.Add(this.b0, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.b1, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.b6, 2, 2);
@@ -135,7 +136,8 @@
             this.tableLayoutPanel1.Controls.Add(this.b7, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.b3, 2, 1);
             this.tableLayoutPanel1.Controls.Add(this.b2, 1, 1);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(8, 72);
+            this.tableLayoutPanel1.Controls.Add(this.bDot, 2, 4);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(16, 56);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 5;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -145,6 +147,16 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.Size = new System.Drawing.Size(136, 232);
             this.tableLayoutPanel1.TabIndex = 6;
+            // 
+            // b00
+            // 
+            this.b00.Location = new System.Drawing.Point(49, 177);
+            this.b00.Name = "b00";
+            this.b00.Size = new System.Drawing.Size(40, 40);
+            this.b00.TabIndex = 34;
+            this.b00.Text = "00";
+            this.b00.UseVisualStyleBackColor = true;
+            this.b00.Click += new System.EventHandler(this.b00_Click);
             // 
             // bC
             // 
@@ -175,16 +187,6 @@
             this.bBS.Text = "BS";
             this.bBS.UseVisualStyleBackColor = true;
             this.bBS.Click += new System.EventHandler(this.bBS_Click);
-            // 
-            // bDot
-            // 
-            this.bDot.Location = new System.Drawing.Point(49, 177);
-            this.bDot.Name = "bDot";
-            this.bDot.Size = new System.Drawing.Size(40, 40);
-            this.bDot.TabIndex = 10;
-            this.bDot.Text = ".";
-            this.bDot.UseVisualStyleBackColor = true;
-            this.bDot.Click += new System.EventHandler(this.bDot_Click);
             // 
             // b0
             // 
@@ -226,6 +228,16 @@
             this.b7.UseVisualStyleBackColor = true;
             this.b7.Click += new System.EventHandler(this.b7_Click);
             // 
+            // bDot
+            // 
+            this.bDot.Location = new System.Drawing.Point(95, 177);
+            this.bDot.Name = "bDot";
+            this.bDot.Size = new System.Drawing.Size(40, 40);
+            this.bDot.TabIndex = 10;
+            this.bDot.Text = ".";
+            this.bDot.UseVisualStyleBackColor = true;
+            this.bDot.Click += new System.EventHandler(this.bDot_Click);
+            // 
             // bPlus
             // 
             this.bPlus.Location = new System.Drawing.Point(3, 3);
@@ -255,7 +267,7 @@
             this.tableLayoutPanel2.Controls.Add(this.bMulti, 0, 2);
             this.tableLayoutPanel2.Controls.Add(this.bPlus, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.bMinus, 0, 1);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(144, 72);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(152, 56);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 5;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
@@ -302,13 +314,13 @@
             this.display1.Location = new System.Drawing.Point(8, 32);
             this.display1.Name = "display1";
             this.display1.ReadOnly = true;
-            this.display1.Size = new System.Drawing.Size(184, 19);
+            this.display1.Size = new System.Drawing.Size(200, 19);
             this.display1.TabIndex = 31;
             this.display1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // display2
             // 
-            this.display2.Location = new System.Drawing.Point(168, 8);
+            this.display2.Location = new System.Drawing.Point(184, 8);
             this.display2.Name = "display2";
             this.display2.Size = new System.Drawing.Size(24, 19);
             this.display2.TabIndex = 32;
@@ -317,7 +329,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(199, 297);
+            this.ClientSize = new System.Drawing.Size(216, 283);
             this.Controls.Add(this.display2);
             this.Controls.Add(this.display1);
             this.Controls.Add(this.tableLayoutPanel2);
@@ -357,6 +369,7 @@
         private System.Windows.Forms.Button bBS;
         private System.Windows.Forms.TextBox display1;
         private System.Windows.Forms.TextBox display2;
+        private System.Windows.Forms.Button b00;
     }
 }
 

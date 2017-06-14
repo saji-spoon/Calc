@@ -151,6 +151,12 @@ namespace Calc002
             updateDisplay();
         }
 
+        private void b00_Click(object sender, EventArgs e)
+        {
+            calc.push("00");
+            updateDisplay();
+        }
+
 
 
 

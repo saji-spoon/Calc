@@ -96,6 +96,7 @@ namespace Calc002
             init();
         }
 
+        //電卓の計算状態を元に戻す Cキーを押したとき・初期化用
         public void init()
         {
             this.Exp = new Expression();
@@ -136,13 +137,12 @@ namespace Calc002
             }
         }
 
+        //数字キーのいずれかが押されたとき→push()
         public void pushNum(int num) 
         {
-            if(!(num <= 9))
-            {
-                return;
-            }
+            push(num.ToString());
 
+            /*
             if (IsError) init();
 
             Term target = getTerm(true);
@@ -158,11 +158,14 @@ namespace Calc002
                 target.Value = result.ToString();
                 ExpText = target.Value;
             }
+             * */
         }
 
-        //.キーが押されたときの処理
+        //.キーが押されたとき→push()
         public void pushDot()
         {
+            push(".");
+            /*
             Term target;
 
             target = getTerm(true);
@@ -177,9 +180,40 @@ namespace Calc002
                 target.Value = temp;
 
                 ExpText = target.Value;
+            }*/
+
+
+        }
+
+        //数式スタックの編集対象の項に、strを入力する
+        //追加した結果がdecimal.TryParseに失敗するなら反映しない
+        public void push(string str) 
+        {
+            if (IsError) init();
+
+            Term target = getTerm(true);
+
+            string targetV = target.Value;
+
+            switch (str) 
+            {
+                case ".":
+                    targetV += str;
+                    break;
+                case "00":
+                    targetV = (targetV == "0") ? targetV : targetV + str;
+                    break;
+                default: //単一の数字入力
+                    targetV = (targetV == "0") ? str : targetV + str;
+                    break;
             }
 
-
+            decimal result;
+            if (decimal.TryParse(targetV, out result))
+            {
+                target.Value = targetV;
+                ExpText = target.Value;
+            }
         }
 
         //演算子キーのどれかが押されたときの処理
@@ -242,8 +276,6 @@ namespace Calc002
                     break;
             }
         }
-
-
 
         public void pushBS()
         {
