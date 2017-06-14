@@ -7,6 +7,8 @@ using System.Windows.Forms;
 
 namespace Calc002
 {
+
+
     enum Operator 
     {
         Plus,
