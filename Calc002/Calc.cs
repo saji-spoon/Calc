@@ -70,15 +70,12 @@ namespace Calc002
                     break;
             }
 
-            L.Value = dl.ToString();
+            A = new Term(dl.ToString());
             Op = null;
             R = null;
 
             return true;
         }
-
-  
-
     }
 
     class Calc
@@ -142,48 +139,12 @@ namespace Calc002
         public void pushNum(int num) 
         {
             push(num.ToString());
-
-            /*
-            if (IsError) init();
-
-            Term target = getTerm(true);
-
-            string temp = target.Value;
-             
-            temp = (temp == "0") ? num.ToString() : temp + num.ToString();
-
-            //入力した結果がParseできるかチェックしてからターゲットの項とテキストに反映する
-            decimal result;
-            if (decimal.TryParse(temp, out result)) 
-            {
-                target.Value = result.ToString();
-                ExpText = target.Value;
-            }
-             * */
         }
 
         //.キーが押されたとき→push()
         public void pushDot()
         {
             push(".");
-            /*
-            Term target;
-
-            target = getTerm(true);
-
-            string temp = target.Value;
-
-            temp += ".";
-
-            decimal result;
-            if (decimal.TryParse(temp, out result))
-            {
-                target.Value = temp;
-
-                ExpText = target.Value;
-            }*/
-
-
         }
 
         //数式スタックの編集対象の項に、strを入力する
@@ -220,6 +181,8 @@ namespace Calc002
         //演算子キーのどれかが押されたときの処理
         public void pushOp(Operator op) 
         {
+            if (op == Operator.Equal) return;
+
             //右項を入力せずに連続して記号を入力→無効
             if(Exp.Op != null && Exp.R == null)
             {
@@ -228,8 +191,8 @@ namespace Calc002
 
             if (IsError) return;
 
-            //右項入力済みで記号を入力→計算して左辺へ代入した上で演算子を受付
-            if (Exp.R != null) 
+            //右項入力済み、答えなしの状態で記号を入力→計算して左辺へ代入した上で演算子を受付
+            if (Exp.R != null && Exp.A == null) 
             {
                 try
                 {
@@ -245,14 +208,7 @@ namespace Calc002
                     setError();
                     return;
                 }
-                ExpText = Exp.L.Value;
-
-                //「=」は結果の表示だけ　続けて計算はしない
-                if (op == Operator.Equal)
-                {
-                    OpText = "";
-                    return;
-                }
+                ExpText = Exp.A.Value;
             }
 
             //演算子を受付
