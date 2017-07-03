@@ -71,8 +71,6 @@ namespace Calc002
             }
 
             A = new Term(dl.ToString());
-            Op = null;
-            R = null;
 
             return true;
         }
@@ -191,24 +189,21 @@ namespace Calc002
 
             if (IsError) return;
 
-            //右項入力済み、答えなしの状態で記号を入力→計算して左辺へ代入した上で演算子を受付
-            if (Exp.R != null && Exp.A == null) 
+            //右項入力済みの場合→答えを左辺に持ってきて演算子を受付
+            if (Exp.R != null) 
             {
-                try
+                //答えがない場合は計算
+                if (Exp.A == null)
                 {
-                    Exp.eval();
+                    bool isSuccess = pushEq();
+                    if (!isSuccess) return;
                 }
-                catch (OverflowException ofe) 
-                {
-                    setError();
-                    return;
-                }
-                catch (DivideByZeroException dze) 
-                {
-                    setError();
-                    return;
-                }
-                ExpText = Exp.A.Value;
+
+                //答えを左辺に持ってくる、演算子以右は初期化
+                Exp.L = Exp.A;
+                Exp.Op = null;
+                Exp.A = null;
+                Exp.R = null;
             }
 
             //演算子を受付
@@ -234,9 +229,36 @@ namespace Calc002
             }
         }
 
-        public void pushEq() 
+        public  bool pushEq() 
         {
-            if (!Exp.eval()) return;
+            if (IsError) return false;
+
+            if(Exp.A != null)
+            {
+                Exp.L = Exp.A;
+            }
+
+            try
+            {
+                bool isSucess = Exp.eval();
+                if (!isSucess) return false;
+
+            }
+            catch (OverflowException ofe)
+            {
+                setError();
+                return false;
+            }
+            catch (DivideByZeroException dze)
+            {
+                setError();
+                return false;
+            }
+            ExpText = Exp.A.Value;
+
+            return true;
+
+
         }
 
         public void pushBS()

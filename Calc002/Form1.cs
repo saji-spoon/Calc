@@ -121,7 +121,7 @@ namespace Calc002
 
         private void bEq_Click(object sender, EventArgs e)
         {
-            calc.pushOp(Operator.Equal);
+            calc.pushEq();
             updateDisplay();
 
         }
